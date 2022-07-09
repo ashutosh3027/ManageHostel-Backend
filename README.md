@@ -73,7 +73,7 @@ To run this project, you will need to add the following environment variables to
 |    ------   | --------- | --------  |
 | allocatedTo | ObjectId  |   true    |
 | roomNumber  | String    |   true    |
-| allcoatedBy | String    |   --      |
+| allocatedBy | String    |   --      |
 
 ### Request Schema
 

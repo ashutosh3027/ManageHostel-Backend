@@ -20,7 +20,7 @@ const roomSchema = new mongoose.Schema(
           required:[function(){return this.isAllocated}, 'Please provide allocated user information']
       },
       allocatedAt:Date,
-      allcoatedBy:{
+      allocatedBy:{
           type:String,
           required:[function(){return this.isAllocated}, 'Please provide allocating admin.']
       }
