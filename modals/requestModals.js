@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 const User = require("./userModals");
 const Room = require("./roomModals");
-
+const Building = require("./buildingModal");
+const College = require("./collegeModals");
 const requestSchema = new mongoose.Schema({
-  user: { 
+  userId: { 
     type: mongoose.Schema.ObjectId,
     ref: "User",
     required:[true, 'Request must belong to a user'] 
   },
-  room: {
+  roomId: {
     type:mongoose.Schema.ObjectId,
     ref:'Room',
     required:[true, 'Request must belong to a room']
@@ -21,6 +22,19 @@ const requestSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  requestActiveStatus:{
+    type:Boolean,
+    default:true
+  }, 
+  collegeId:{
+    type: mongoose.Schema.ObjectId,
+    ref:'College',
+    required:[true, 'Request must belong to a college']
+  },
+  buildingId:{
+    type:mongoose.Schema.ObjectId,
+    ref:'Building'
+  }
 },
 {
   toJSON:{virtuals:true},

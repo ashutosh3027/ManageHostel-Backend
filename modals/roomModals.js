@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const User = require('./userModals');
 const Request = require('./requestModals');
-
+const Building = require("./buildingModal");
+const College = require("./collegeModals");
 
 const roomSchema = new mongoose.Schema(
     {
@@ -23,6 +24,15 @@ const roomSchema = new mongoose.Schema(
       allocatedBy:{
           type:String,
           required:[function(){return this.isAllocated}, 'Please provide allocating admin.']
+      },
+      collegeId:{
+        type: mongoose.Schema.ObjectId,
+        ref:'College',
+        required:[true, 'Request must belong to a college']
+      },
+      buildingId:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Building'
       }
     },
     {

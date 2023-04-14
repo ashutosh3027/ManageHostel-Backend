@@ -9,7 +9,9 @@ process.on('uncaughtException', err=>{
   process.exit(1); //1 for uncaugth rejection and 0 for success
 })
 const app = require("./app");
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+// const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+// mongoose.connect(DB, {
+const DB = process.env.DATABASE
 mongoose.connect(DB, {
 // mongoose.connect(process.env.DATABASE_LOCAL, {
   useNewUrlParser:true
