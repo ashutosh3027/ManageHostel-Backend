@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Server for hostel managment System",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "start:prod": "SET NODE_ENV=production & nodemon server.js",
-    "debug": "ndb server.js",
+    "start": "nodemon index.js",
+    "start:prod": "SET NODE_ENV=production & nodemon index.js",
+    "debug": "ndb index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ashutosh Verma",
