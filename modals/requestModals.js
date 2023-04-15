@@ -18,11 +18,11 @@ const requestSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  requestStatus: {
+  requestStatus: { // this is for checking if request is acepted or rejected
     type: Boolean,
     default: false,
   },
-  requestActiveStatus:{
+  requestActiveStatus:{ // this is to check whether the request is active or not.
     type:Boolean,
     default:true
   }, 

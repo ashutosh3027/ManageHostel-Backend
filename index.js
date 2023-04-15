@@ -12,7 +12,11 @@ const app = require("./app");
 // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 // mongoose.connect(DB, {
 const DB = process.env.DATABASE
-mongoose.connect(DB, {
+var dbUrl = DB.replace('<password>', process.env.PASSWORD)
+if(process.env.NODE_ENV==='development'){
+  dbUrl= process.env.DATABASE_LOCAL
+}
+mongoose.connect(dbUrl, {
 // mongoose.connect(process.env.DATABASE_LOCAL, {
   useNewUrlParser:true
 }).then((con)=>{

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const collegeSchema = new mongoose.Schema({
     collegeName:{
         type:String,
-        require:[true, 'A college must have name!!']
+        // require:[true, 'A college must have name!!']
     },
 
 },
