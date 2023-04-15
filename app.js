@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controller/errorController');
 const app = express();
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const requestRouter = require('./routes/requestRoutes');
@@ -12,6 +13,7 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize  = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
+app.use(cors({ credentials: true, origin: true }));
 //  GLOBAL MIDDLEWARES
 
 // SET security HTTP headers
