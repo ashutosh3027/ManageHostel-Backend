@@ -1,13 +1,13 @@
 const express = require("express");
 const userController = require("./../controller/userController");
 const router = express.Router();
-const { getAllUsers, createNewUser, getUserById, updateUser, deleteUser } =
+const { getAllUsers, createNewUser, getUserById, updateUser, deleteUser,getUserProfile } =
   userController;
 const authController = require("./../controller/authController");
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
-router.get('/profile', getUserById);
+router.get('/profile',authController.protect, getUserProfile);
 
 router.post("/forgotPassword", authController.forgetPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
