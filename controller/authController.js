@@ -60,8 +60,13 @@ exports.login = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res);
 });
 
-/**********************************Check whether user is logged in or not*********************************/
-
+/**
+ * Checks whether user is logged in or not.
+ * header must have authoriztion parameter.
+ * Each token must start with ``Bearer`` keyword.
+ * Or cookies have jwt parameter.
+ * it will set user parameter is req object with current user details.
+ */
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   if (
@@ -94,7 +99,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError("User recently chnaged password! Please log in again.", 401)
+      new AppError("User recently changed password! Please log in again.", 401)
     );
   }
   req.user = currentUser;
@@ -120,6 +125,7 @@ exports.restrictTo = (...roles) => {
 
 exports.forgetPassword = async (req, res, next) => {
   // Get user by email
+  console.log(req.body)
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new AppError("There is no user with that email address", 404));

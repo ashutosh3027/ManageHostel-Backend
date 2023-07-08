@@ -8,6 +8,7 @@ process.on('uncaughtException', err=>{
   console.log(err.name, err.message);
   process.exit(1); //1 for uncaugth rejection and 0 for success
 })
+mongoose.set('strictQuery', true);
 const app = require("./app");
 // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 // mongoose.connect(DB, {

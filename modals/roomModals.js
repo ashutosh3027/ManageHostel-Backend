@@ -21,18 +21,10 @@ const roomSchema = new mongoose.Schema(
           required:[function(){return this.isAllocated}, 'Please provide allocated user information']
       },
       allocatedAt:Date,
-      allocatedBy:{
-          type:String,
-          required:[function(){return this.isAllocated}, 'Please provide allocating admin.']
-      },
-      collegeId:{
-        type: mongoose.Schema.ObjectId,
-        ref:'College',
-        required:[true, 'Request must belong to a college']
-      },
       buildingId:{
         type:mongoose.Schema.ObjectId,
-        ref:'Building'
+        ref:'Building',
+        required:[true, 'Room must belong to any building']
       }
     },
     {
@@ -51,6 +43,6 @@ roomSchema.virtual('requests', {
 roomSchema.pre(/^find/, function(next){
     this.populate({path:'requests'}).populate({path:'allocatedTo'});
     next();
-  })
+})
 const Room = mongoose.model('Room', roomSchema);
 module.exports = Room;
