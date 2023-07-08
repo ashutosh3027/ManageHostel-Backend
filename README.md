@@ -2,6 +2,10 @@
 
 This repo is the backend of the ManageHostel project. It provides various APIs to the client.
 
+## Swagger API Documentation
+
+[Documentation](https://managehostel-api.onrender.com/api/v1/docs/)
+
 ## Tech Stack
 
 - [NodeJs](https://nodejs.org/en/about/)
