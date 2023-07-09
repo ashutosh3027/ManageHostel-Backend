@@ -38,11 +38,9 @@ const createMuiltipleCollege = catchAsync(async(req, res, next)=>{
     for(var i=0;i<collegeNames.length;i++) {
         var collegeName = collegeNames[i].trim();
         const college = await College.find({ collegeName: { $regex: new RegExp(collegeName, 'i') } });
-        console.log(college, college.length===0)
         if (college.length===0) {
             const newCollege = await createNewCollege(collegeName);
             newColleges.push(newCollege);
-            count++;
         }
     };
     return res.status(200).json({
