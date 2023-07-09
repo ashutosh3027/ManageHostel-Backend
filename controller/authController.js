@@ -69,6 +69,7 @@ exports.login = catchAsync(async (req, res, next) => {
  */
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
+  console.log(req.body)
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -82,7 +83,7 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError("You are not logged in! Please log in to get access.", 401)
     );
   }
-
+  console.log(token)
   //Verification token.
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); // this jwt.verify is a async function  so it's 3rd arugument is callback function.
@@ -111,7 +112,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 // this is going to be used when we want some resources to be restricted to admin only
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    // roles ['admin']
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError("You do not have permission to perform this action", 403)

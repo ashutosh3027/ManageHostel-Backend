@@ -13,7 +13,7 @@ router.route('/:id').get(getRoomById).patch(updateRoom).delete(authController.pr
 router.route('/getRoomsByBuildingId/:buildingId').get(authController.protect,getRoomsByBuildingId);
 router.route('/book-room').post(authController.protect,roomController.bookRoom);
 router.route('/vacant-room/:roomId').post(authController.protect,roomController.vacantRoom);
-router.route('/vacant-rooms/:buildingId').post(authController.protect, authController.restrictTo(['admin']), roomController.vacantRooms);
-
+router.route('/vacant-rooms/:buildingId').post(authController.protect, authController.restrictTo('admin'), roomController.vacantRooms);
+router.get("/rooms/:roomId/user", authController.protect,roomController.getRoomUser);
 
 module.exports = router;

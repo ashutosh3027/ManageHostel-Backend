@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const Room = require('./roomModals')
 const Building = require("./buildingModal");
 const College = require("./collegeModals");
 const userSchema = new mongoose.Schema(
@@ -37,8 +38,8 @@ const userSchema = new mongoose.Schema(
             validate: {
                 // This only works on Create and Save!!
                 validator: function (el) {
-                    console.log("thest:",this.isModified('password'))
-                    return !this.isModified('password')||el === this.password;
+                    if(!this.isModified('password')) return true;
+                    return el === this.password;
                 },
                 message: 'Password are not same!'
             }
@@ -91,11 +92,32 @@ userSchema.virtual('requests', {
     foreignField: 'user',
     localField: '_id'
 });
+userSchema.virtual('room', {
+    ref: 'Room',
+    localField: 'RoomNumber',
+    foreignField: 'roomNumber',
+    options: {
+        match: {buildingId: '$buildingId' }
+    }
+});
 // this will populate
 userSchema.pre(/^find/, function (next) {
     this.populate({ path: 'requests' });
+
+    this.populate({
+        path: 'buildingId',
+        select: '-__v'
+    });
+    this.populate({
+        path: 'room',
+        match: { isAllocated: true },
+        select: '-buildingId -allocatedTo -__v'
+    });
+
+
     next();
-})
+});
+
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
 }

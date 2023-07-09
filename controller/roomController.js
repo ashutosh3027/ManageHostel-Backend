@@ -163,6 +163,11 @@ const bookRoom = catchAsync(async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
+  // Check if the user already has a room assigned
+  if (user.isRoomAlloted) {
+    return res.status(400).json({ message: 'User already has a room assigned' });
+  }
+
 
   // Update the room's allocation status
   room.isAllocated = true;
@@ -213,7 +218,7 @@ const vacantRoom = catchAsync(async (req, res, next) => {
   }
   // Check whether current user is allowed to vacant current room.
   if (req.user.role === 'student') {
-    if (req.user.id !== room.allocatedTo) {
+    if (req.user.id !== room.allocatedTo.id) {
       return res.status(401).json({
         staus: "fail",
         message: "You are not allowed to vacant room of other users"
@@ -249,7 +254,7 @@ const vacantRoom = catchAsync(async (req, res, next) => {
   await room.save();
 
   res.status(200).json({
-    message: 'Room vacated successfully', 
+    message: 'Room vacated successfully',
     data: {
       user,
       room
@@ -276,14 +281,11 @@ const vacantRooms = catchAsync(async (req, res, next) => {
   // Get an array of user IDs allocated to the occupied rooms
   const userIds = rooms.map((room) => room.allocatedTo);
 
-  // Find all users allocated to the occupied rooms
-  const users = await User.find({ _id: { $in: userIds } });
-
-  // Update each user's room information
-  users.forEach((user) => {
-    user.isRoomAlloted = false;
-    user.RoomNumber = null;
-    user.roomAllotedAt = null;
+  // Find all users allocated to the occupied rooms and update their details
+  await User.updateMany({ _id: { $in: userIds } }, {
+    isRoomAlloted: false,
+    RoomNumber: null,
+    roomAllotedAt: null
   });
 
   // Update all occupied rooms' allocation status
@@ -293,11 +295,9 @@ const vacantRooms = catchAsync(async (req, res, next) => {
     allocatedAt: null
   });
 
-  // Save the updated users
-  await Promise.all(users.map((user) => user.save()));
-
   res.status(200).json({ message: 'All occupied rooms in the building have been vacated' });
-})
+});
+
 /**
  * This api is useless now.
  */
@@ -312,6 +312,30 @@ const vacantRooms = catchAsync(async (req, res, next) => {
 //   }
 // });
 
+const getRoomUser = catchAsync(async (req, res, next) => {
+
+  const roomId = req.params.roomId;
+  const room = await Room.findById(roomId);
+
+  if (!room) {
+    return res.status(404).json({ message: "Room not found" });
+  }
+
+  const userId = room.allocatedTo;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
+  });
+
+})
 
 
 
@@ -326,5 +350,6 @@ module.exports = {
   bookRoom,
   vacantRoom,
   vacantRooms,
-  deleteRoomById
+  deleteRoomById,
+  getRoomUser
 };

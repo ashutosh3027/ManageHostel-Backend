@@ -23,8 +23,8 @@ const docs = require('./docs')
 //   apis: ['./routes/*.js'],
 // };
 // const swaggerSpec = swaggerJSDoc(options);
-// app.use(cors({ credentials: true, origin: true }));
-app.use(cors({origin: '*'}));
+app.use(cors({ credentials: true, origin: true }));
+// app.use(cors({origin: '*'}));
 //  GLOBAL MIDDLEWARES
 
 // SET security HTTP headers
