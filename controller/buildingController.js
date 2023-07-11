@@ -14,7 +14,7 @@ const createAndSendBuilding = async (buildingName, collegeName) => {
     else {
         // if there is no college with name collegeName
         collegeData = createNewCollege(collegeName);
-        const newBuilding = await Building.create({ collegeId: collegeData.id, buildingName });
+        const newBuilding = await (await Building.create({ collegeId: collegeData.id, buildingName })).populate('collegeId');
         return newBuilding
     }
 }
