@@ -9,11 +9,14 @@ const roomSchema = new mongoose.Schema(
     roomNumber: {
       type: String,
       required: [true, 'Please prrovide room number'],
-      unique: true
     },
     isAllocated: {
       type: Boolean,
       default: false
+    },
+    roomType:{
+      type:String,
+      enum:['Single', 'Double']
     },
     allocatedTo: {
       type: mongoose.Schema.ObjectId,

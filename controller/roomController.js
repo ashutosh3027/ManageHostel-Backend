@@ -14,8 +14,29 @@ const getAllRooms = catchAsync(async (req, res, next) => {
   });
 });
 const createNewRoom = catchAsync(async (req, res, next) => {
-  const newRoom = await Room.create(req.body);
+  const { roomNumber, buildingId, roomType } = req.body;
+  
+  // Validate that all required fields are provided
+  if (!roomNumber || !buildingId || !roomType) {
+    return res.status(400).json({ error: 'Please provide all required information' });
+  }
+  // Check if the building with the provided buildingId exists
+  const building = await Building.findById(buildingId);
+  if (!building) {
+    return res.status(404).json({ error: 'Building not found' });
+  }
 
+  // Check if a room with the provided roomNumber already exists
+  const existingRoom = await Room.findOne({ roomNumber, buildingId });
+  if (existingRoom) {
+    return res.status(400).json({ error: 'Room number already exists' });
+  }
+  // Create the new room
+  const newRoom = await Room.create({
+    roomNumber,
+    roomType,
+    buildingId,
+  });
   res.status(201).json({
     status: "success",
     data: {
@@ -101,10 +122,27 @@ const updateRoom = (req, res) => {
  * - Red flag api not allowed to anyone unless and util it is required.
  */
 const deleteRoom = catchAsync(async (req, res) => {
-  const data = await Room.deleteMany();
+  const { roomNumber, buildingId } = req.body;
+  
+  // Validate that all required fields are provided
+  if (!roomNumber || !buildingId ) {
+    return res.status(400).json({ error: 'Please provide all required information' });
+  }
+  // Check if the building with the provided buildingId exists
+  const building = await Building.findById(buildingId);
+  if (!building) {
+    return res.status(404).json({ error: 'Building not found' });
+  }
+
+  // Check if a room with the provided roomNumber already exists
+  const room = await Room.findOne({ roomNumber, buildingId });
+  if (room.isAllocated) {
+    return res.status(400).json({ error: 'Room is allocated to some user' });
+  }
+  const data = await Room.deleteOne({_id:room.id});
   res.status(200).json({
     status: "sucess",
-    message: "All rooms are deleted",
+    message: "Room is deleted",
     data
   });
 });
