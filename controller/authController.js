@@ -45,8 +45,6 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -69,7 +67,6 @@ exports.login = catchAsync(async (req, res, next) => {
  */
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
-  console.log(req.body)
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -83,7 +80,6 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError("You are not logged in! Please log in to get access.", 401)
     );
   }
-  console.log(token)
   //Verification token.
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); // this jwt.verify is a async function  so it's 3rd arugument is callback function.
