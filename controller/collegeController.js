@@ -67,10 +67,9 @@ const getAllBuildingsByCollegeId = catchAsync(async (req, res, next) => {
             message: 'College not found'
         });
     }
-
     // Get all buildings associated with the collegeId
     const buildings = await Building.find({ collegeId });
-
+    console.log(buildings)
     res.status(200).json({
         status: 'success',
         results: buildings.length,
