@@ -191,7 +191,7 @@ const bookRoom = catchAsync(async (req, res) => {
 
   // Check if the room is already allocated
   if (room.isAllocated) {
-    return res.status(400).json({ message: 'Room is already allocated' });
+    return res.status(400).json({ message: 'Room is not available' });
   }
 
   // Find the user

@@ -27,12 +27,16 @@ const sendErrorProd = (err, res) => {
     });
   }
 };
+const handleCastError = (err, res) => {
+   err.message='Invalid ID format. Please provide a valid ID.'
+};
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
   process.env.NODE_ENV = process.env.NODE_ENV.trim();
   if(err.name==='JsonWebTokenError')  err = handleJWTError(err);
   if(err.name==='TokenExpiredError') err = handleTokenExpiredError(err);
+  if(err.name==="CastError"&& err.kind === 'ObjectId') handleCastError(err, res);
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {

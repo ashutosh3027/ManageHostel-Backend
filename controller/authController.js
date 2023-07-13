@@ -34,13 +34,32 @@ const createAndSendToken = (newUser, statusCode, res) => {
   });
 };
 exports.signup = catchAsync(async (req, res, next) => {
+  // Check if required fields are present
+  if (!req.body.name || !req.body.email || !req.body.password || !req.body.passwordConfirm) {
+    return res.status(400).json({ error: 'Incomplete information. Please provide name, email, password, and passwordConfirm.' });
+  }
+
+  const { name, email, password, passwordConfirm } = req.body;
+
+  // Check if the email is already registered
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({ error: 'Email already exists. Please use a different email address.' });
+  }
+
+  // Check if password and passwordConfirm match
+  if (password !== passwordConfirm) {
+    return res.status(400).json({ error: 'Passwords do not match. Please make sure the password and passwordConfirm fields are the same.' });
+  }
+
   const newUser = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt,
+    name,
+    email,
+    password,
+    passwordConfirm,
+    passwordChangedAt: Date.now(),
   });
+
   createAndSendToken(newUser, 201, res);
 });
 
