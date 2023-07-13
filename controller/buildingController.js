@@ -22,9 +22,15 @@ exports.createBuilding = catchAsync(async (req, res, next) => {
     var { buildingName, collegeName } = req.body;
     collegeName = collegeName.trim();
     buildingName = buildingName.trim();
-    if (!collegeName || !buildingName) return res.status(400).json({
-        status: "All fields are required!"
+    if (!collegeName ) return res.status(400).json({
+        status: "fail",
+        error:"Missing College Name"
     })
+    if (!buildingName ) return res.status(400).json({
+        status: "fail",
+        error:"Missing Building Name"
+    })
+    
     const newBuilding = await createAndSendBuilding(buildingName, collegeName)
     return res.status(200).json({
         status: "success",
