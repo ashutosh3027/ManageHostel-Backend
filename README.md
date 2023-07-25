@@ -55,8 +55,6 @@ To run this project, you will need to add the following environment variables to
 
 `EMAIL_PASSWORD`
 
-`EMAIL_HOST`
-
-`EMAIL_PORT`
 ## Database Schema
+
 ![image description](dbSchema.png)
