@@ -100,6 +100,14 @@ userSchema.virtual('room', {
         match: {buildingId: '$buildingId' }
     }
 });
+userSchema.virtual('room', {
+    ref: 'Room',
+    localField: 'RoomNumber',
+    foreignField: 'roomNumber',
+    options: {
+        match: {buildingId: '$buildingId' }
+    }
+});
 // this will populate
 userSchema.pre(/^find/, function (next) {
     this.populate({ path: 'requests' });
@@ -113,6 +121,9 @@ userSchema.pre(/^find/, function (next) {
         match: { isAllocated: true },
         select: '-buildingId -allocatedTo -__v'
     });
+    this.populate({
+        path:'room'
+    })
 
 
     next();
