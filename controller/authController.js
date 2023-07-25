@@ -217,3 +217,22 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // Log user in, send JWT
   createAndSendToken(user, 200, res);
 });
+
+const validToken = catchAsync(async (req, res)=>{
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  // check if user exist or token is not expired.
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(new AppError("Token is invalid or has expired.", 400));
+  }
+  return res.status(200).json({
+    message:"Valid token"
+  })
+})

@@ -10,7 +10,7 @@ router.post("/login", authController.login);
 router.get('/profile',authController.protect, getUserProfile);
 
 router.post("/forgotPassword", authController.forgetPassword);
-router.patch("/resetPassword/:token", authController.resetPassword);
+router.route("/resetPassword/:token").patch(authController.resetPassword).get(authController.validToken);
 router.patch("/updateMyPassword", authController.protect,  authController.updatePassword);
 router.patch("/update-college",authController.protect,userController.updateUserCollege)
 router.route("/").get(getAllUsers).post(createNewUser);
