@@ -218,7 +218,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res);
 });
 
-const validToken = catchAsync(async (req, res)=>{
+exports.validToken = catchAsync(async (req, res)=>{
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.token)
