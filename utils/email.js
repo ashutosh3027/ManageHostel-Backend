@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const catchAsync = require('./catchAsync');
 
 
 // const sendEmail = async (options)=>{
@@ -19,21 +20,22 @@ const nodemailer = require('nodemailer');
 //     await transporter.sendMail(mailOptions);
 // }
 
-const sendEmail = async (options)=>{
-    console.log(options)
+const sendEmail = async (options) => {
     const transporter = nodemailer.createTransport({
-        service:'gmail',
-        auth:{
-            user:process.env.EMAIL_USERNAME,
-            pass:process.env.EMAIL_PASSWORD
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
         }
     });
-    const mailOptions={
-        from:'asverma3027@gmail.com',
-        to:options.email,
-        subject:options.subject,
-        text:options.message
+    const mailOptions = {
+        from: 'manageHostels@gmail.com',
+        to: options.email,
+        subject: options.subject,
+        text: options.message
     }
     await transporter.sendMail(mailOptions);
+
+
 }
 module.exports = sendEmail;

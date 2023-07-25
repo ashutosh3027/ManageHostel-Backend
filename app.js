@@ -6,7 +6,6 @@ const app = express();
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const roomRoutes = require('./routes/roomRoutes');
-const requestRouter = require('./routes/requestRoutes');
 const collegeRoutes = require('./routes/collegeRoutes');
 const buildingRoutes = require('./routes/buildingRoutes')
 const rateLimit = require('express-rate-limit');
@@ -56,7 +55,6 @@ const limiter = rateLimit({
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(docs));
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/rooms', roomRoutes);
-app.use('/api/v1/requests', requestRouter);
 app.use('/api/v1/colleges', collegeRoutes)
 app.use('/api/v1/buildings', buildingRoutes);
 app.use('*', (req, res, next) => {

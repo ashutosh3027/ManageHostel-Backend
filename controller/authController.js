@@ -7,6 +7,7 @@ const sendEmail = require("./../utils/email");
 const crypto = require("crypto");
 const { find } = require("../modals/userModals");
 const { stringify } = require("querystring");
+const { chown } = require("fs");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -140,7 +141,6 @@ exports.restrictTo = (...roles) => {
 
 exports.forgetPassword = async (req, res, next) => {
   // Get user by email
-  console.log(req.body)
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new AppError("There is no user with that email address", 404));
@@ -150,9 +150,7 @@ exports.forgetPassword = async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Send it to user's email
-  const resetURL = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/users/resetPassword/${resetToken}`;
+  const resetURL = `${req.headers['origin']}/resetPassword/${resetToken}`;
   const message = `Forget your password? Submit a Patch request with your new password and passwordConfirm to: ${resetURL}.\nIf you don't forget your password, please ignore this email!`;
   try {
     await sendEmail({
@@ -201,6 +199,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   createAndSendToken(user, 200, res);
 });
+
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   const { passwordConfirm, newPassword, newPasswordConfirm } = req.body;
