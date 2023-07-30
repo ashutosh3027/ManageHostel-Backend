@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
             validate: {
                 // This only works on Create and Save!!
                 validator: function (el) {
-                    if(!this.isModified('password')) return true;
+                    if (!this.isModified('password')) return true;
                     return el === this.password;
                 },
                 message: 'Password are not same!'
@@ -94,39 +94,31 @@ userSchema.virtual('requests', {
 });
 userSchema.virtual('room', {
     ref: 'Room',
-    localField: 'RoomNumber',
-    foreignField: 'roomNumber',
+    localField: 'RoomNumber', // The field in the User schema that corresponds to 'roomNumber' in the Room schema
+    foreignField: 'roomNumber', // The field in the Room schema that corresponds to 'roomNumber' in the User schema
     options: {
-        match: {buildingId: '$buildingId' }
-    }
-});
-userSchema.virtual('room', {
-    ref: 'Room',
-    localField: 'RoomNumber',
-    foreignField: 'roomNumber',
-    options: {
-        match: {buildingId: '$buildingId' }
+        match: { buildingId: '$buildingId' } // Match 'buildingId' in Room with 'buildingId' in User
     }
 });
 // this will populate
-userSchema.pre(/^find/, function (next) {
-    this.populate({ path: 'requests' });
+userSchema.pre(/^find/, async function (next) {
+    try {
+        this.populate({ path: 'requests' });
 
-    this.populate({
-        path: 'buildingId',
-        select: '-__v'
-    });
-    this.populate({
-        path: 'room',
-        match: { isAllocated: true },
-        select: '-buildingId -allocatedTo -__v'
-    });
-    this.populate({
-        path:'room'
-    })
-
-
-    next();
+        this.populate({
+            path: 'room',
+            match: { isAllocated: true },
+            select: '-buildingId -allocatedTo -__v'
+        });
+        this.populate({
+            path: 'buildingId',
+            select: '-__v'
+        });
+        next();
+    } catch (err) {
+        console.error(err); // Log any potential errors to the console
+        next(err); // Pass the error to the next middleware in the stack
+    }
 });
 
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
