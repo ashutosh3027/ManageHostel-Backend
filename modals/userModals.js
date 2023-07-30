@@ -87,11 +87,6 @@ userSchema.pre('save', function (next) {
     next();
 })
 // Virtual populate.
-userSchema.virtual('requests', {
-    ref: 'Request',
-    foreignField: 'user',
-    localField: '_id'
-});
 userSchema.virtual('room', {
     ref: 'Room',
     localField: 'RoomNumber', // The field in the User schema that corresponds to 'roomNumber' in the Room schema
@@ -103,7 +98,6 @@ userSchema.virtual('room', {
 // this will populate
 userSchema.pre(/^find/, async function (next) {
     try {
-        this.populate({ path: 'requests' });
 
         this.populate({
             path: 'room',
