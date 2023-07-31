@@ -57,4 +57,4 @@ To run this project, you will need to add the following environment variables to
 
 ## Database Schema
 
-![image description](dbSchema.png)
+![My animated logo](dbSchema.png)
